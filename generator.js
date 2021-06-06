@@ -11,11 +11,17 @@ function download(filename, text) {
   document.body.removeChild(element);
 }
 
-names = document.querySelectorAll('div[style="white-space: pre-wrap; text-align: justify; font-size: 14px; max-width: 80%;"]');
-scores = document.querySelectorAll('div[style="white-space: pre-wrap; text-align: justify; font-size: 14px;"]');
+rows = Array.from(document.getElementsByTagName('tr')).filter((e,i) => i%2 === 1);
+data = rows.map((e) => {
+    columns = Array.from(e.querySelectorAll('td'))
+    return [columns[0], columns[columns.length-1]]
+});
+names = data.map((e) => e[0].innerText);
+scores = data.map((e) => e[1].innerText);
+
 csv = "";
 for (let i=0; i< names.length; i++){
-    csv+=names[i].textContent+","+scores[i].textContent+"\n";
+    csv+=names[i]+","+scores[i]+"\n";
 }
 
 download("notas.csv",csv);
